@@ -289,7 +289,7 @@ public class Vitk {
 	}
 
 	private static void tokenizeDirectory(File file, Tokenizer tokenizer) {
-		String outputDirPath = file.getParent() + "/" + file.getName() + "_toked";
+		String outputDirPath = file.getParent() + File.separator + file.getName() + "_toked";
 		File outputDir = new File(outputDirPath);
 		File[] listFile = file.listFiles();
 		for (File f : listFile) {
@@ -298,7 +298,7 @@ public class Vitk {
 					outputDir.mkdirs();
 				try {
 					PrintWriter writer = new PrintWriter(new OutputStreamWriter(
-							new FileOutputStream(new File(outputDirPath + "/" + f.getName()), false), "UTF-8"));
+							new FileOutputStream(new File(outputDirPath + File.separator + f.getName()), false), "UTF-8"));
 					tokenizer.tokenize(f.getCanonicalPath(), writer);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
