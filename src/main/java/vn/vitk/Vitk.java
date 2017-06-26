@@ -131,25 +131,7 @@ public class Vitk {
 						}
 					} else {
 						if (file.isDirectory()) {
-							String outputDirPath = file.getParent() + "/" + file.getName() + "_toked";
-							File outputDir = new File(outputDirPath);
-							outputDir.mkdirs();
-							File[] listFile = file.listFiles();
-							for (File f : listFile) {
-								if (f.isFile()) {
-									try {
-										PrintWriter writer = new PrintWriter(
-												new OutputStreamWriter(
-														new FileOutputStream(
-																new File(outputDirPath + "/" + f.getName()), false),
-														"UTF-8"));
-										tokenizer.tokenize(f.getCanonicalPath(), writer);
-									} catch (IOException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-								}
-							}
+							tokenizeDirectory(file, tokenizer);
 						} else {
 							System.err.println("Khong phai tap tin, cung chang phai folder!");
 						}
@@ -304,6 +286,28 @@ public class Vitk {
 			e.printStackTrace();
 		}
 		System.out.println("Done.");
+	}
+
+	private static void tokenizeDirectory(File file, Tokenizer tokenizer) {
+		String outputDirPath = file.getParent() + "/" + file.getName() + "_toked";
+		File outputDir = new File(outputDirPath);
+		File[] listFile = file.listFiles();
+		for (File f : listFile) {
+			if (f.isFile()) {
+				if (!outputDir.exists())
+					outputDir.mkdirs();
+				try {
+					PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+							new FileOutputStream(new File(outputDirPath + "/" + f.getName()), false), "UTF-8"));
+					tokenizer.tokenize(f.getCanonicalPath(), writer);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				tokenizeDirectory(f, tokenizer);
+			}
+		}
 	}
 
 }
